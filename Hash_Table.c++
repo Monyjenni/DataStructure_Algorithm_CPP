@@ -9,6 +9,7 @@ class Hash {
 
 public:
   Hash(int V);
+  ~Hash();
   void insertItem(int key);
   void deleteItem(int key);
   int hashFunction(int x) { return (x % BUCKET); }
@@ -19,7 +20,13 @@ public:
 Hash::Hash(int b) {
   this->BUCKET = b;
   numCollisions = 0;
+  table = new list<int>[b];
 }
+
+Hash::~Hash() {
+  delete[] table;
+}
+
 void Hash::insertItem(int key) {
   int index = hashFunction(key);
 
@@ -32,10 +39,12 @@ void Hash::insertItem(int key) {
 
 void Hash::deleteItem(int key) {
   int index = hashFunction(key);
-  for (int i = 0; i < table[index].size(); i++) {
-    if (table[index][i] == key) {
-      table[index].erase(table[index].begin() + i);
-      break;
+  if (!table[index].empty()) {
+    for (auto it = table[index].begin(); it != table[index].end(); ++it) {
+      if (*it == key) {
+        table[index].erase(it);
+        break;
+      }
     }
   }
 }
@@ -47,10 +56,11 @@ void Hash::displayHash() {
     cout << endl;
   }
 }
+
 int main() {
   cout << "Display Hash Table:" << endl;
   Hash h(10);
-  // cerate array to use with insertItem Function
+  // create array to use with insertItem Function
   string valuesToInsert[] = {"1", "2"};
   int n = sizeof(valuesToInsert) / sizeof(valuesToInsert[0]);
   for (int i = 0; i < n; i++) {
