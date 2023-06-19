@@ -1,17 +1,18 @@
 #include <iostream>
 #include <list>
+
 using namespace std;
 
 class Hash {
   int BUCKET;
-  list<int> *table;
-  int numCollisions; // Number of collisions in the hash table
+  list<const char *> *table; // Change data type to store strings
+  int numCollisions;
 
 public:
   Hash(int V);
   ~Hash();
-  void insertItem(int key);
-  void deleteItem(int key);
+  void insertItem(const char *key); // Change parameter type to accept strings
+  void deleteItem(const char *key); // Change parameter type to accept strings
   int hashFunction(int x) { return (x % BUCKET); }
   void displayHash();
   int getNumCollisions() { return numCollisions; }
@@ -20,15 +21,13 @@ public:
 Hash::Hash(int b) {
   this->BUCKET = b;
   numCollisions = 0;
-  table = new list<int>[b];
+  table = new list<const char *>[b]; // Allocate memory for string lists
 }
 
-Hash::~Hash() {
-  delete[] table;
-}
+Hash::~Hash() { delete[] table; }
 
-void Hash::insertItem(int key) {
-  int index = hashFunction(key);
+void Hash::insertItem(const char *key) {
+  int index = hashFunction(strlen(key)); // Calculate index using key length
 
   if (!table[index].empty()) {
     numCollisions++;
@@ -37,20 +36,22 @@ void Hash::insertItem(int key) {
   table[index].push_back(key);
 }
 
-void Hash::deleteItem(int key) {
-  int index = hashFunction(key);
+void Hash::deleteItem(const char *key) {
+  int index = hashFunction(strlen(key));
+
   if (!table[index].empty()) {
     for (auto it = table[index].begin(); it != table[index].end(); ++it) {
-      if (*it == key) {
+      if (strcmp(*it, key) == 0) { // Compare strings using strcmp function
         table[index].erase(it);
         break;
       }
     }
   }
 }
+
 void Hash::displayHash() {
   for (int i = 0; i < BUCKET; i++) {
-    cout << i;
+    cout << i << " "; // Add space after index
     for (auto x : table[i])
       cout << "-->" << x;
     cout << endl;
@@ -58,23 +59,25 @@ void Hash::displayHash() {
 }
 
 int main() {
-  cout << "Display Hash Table:" << endl;
+  const char *fruit[5] = {"Apple", "Banana", "Cherry", "Strawberry", "Papaya"};
   Hash h(10);
-  // create array to use with insertItem Function
-  string valuesToInsert[] = {"1", "2"};
-  int n = sizeof(valuesToInsert) / sizeof(valuesToInsert[0]);
-  for (int i = 0; i < n; i++) {
-    h.insertItem(stoi(valuesToInsert[i]));
+
+  // Insert strings
+  for (int i = 0; i < 5; i++) {
+    h.insertItem(fruit[i]);
   }
+
   h.displayHash();
-  h.deleteItem(17);
+
+  // Delete string
+  h.deleteItem("Cherry");
 
   cout << "Updated Hash Table:" << endl;
   h.displayHash();
 
   cout << "Collision Hash Table:" << endl;
-  h.insertItem(11);
-  h.insertItem(23);
+  h.insertItem("Orange");
+  h.insertItem("Kiwi");
   h.displayHash();
 
   return 0;
