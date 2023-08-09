@@ -1,28 +1,58 @@
 #include <iostream>
 using namespace std;
 
-// Slow solution - O(n^2)
-int countSumSlow(int n) {
-    int sum = 0;
+// O (1)
+void printHelloWorld() { cout << "Hello, World!" << endl; }
 
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= i; j++) {
-            sum += j;
-        }
+// O(n)
+void printHelloWorld1() {
+  int i, n = 8;
+  for (i = 1; i <= n; i++) {
+    cout << "Hello World !!! \n";
+  }
+}
+
+// O(log n)
+void printHelloWorld2() {
+  int i, n = 8;
+  for (i = 1; i <= n; i = i * 2) {
+    cout << "Hello World!!! \n";
+  }
+}
+// Quadratictime—O(n2)
+void printHelloWorld3() {
+  int n = 8;
+
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= n; j++) {
+      cout << "Hello World!!! \n";
     }
-
-    return sum;
+  }
 }
 
-// Fast solution - O(n)
-int countSumFast(int n) {
-    int sum = (n * (n + 1)) / 2;
-    return sum;
-}
+// Linear time — O(n + m)
+void printHelloWorld4() {
+  int n = 8;
+  int m = 4;
 
+  for (int i = 1; i <= n; i++) {
+    cout << "Hello World!!! \n";
+  }
+
+  for (int j = 1; j <= m; j++) {
+    cout << "Hello Again!!! \n";
+  }
+}
 int main() {
-    int n = 5;
-    cout << "Sum using slow solution: " << countSumSlow(n) << endl;
-    cout << "Sum using fast solution: " << countSumFast(n) << endl;
-    return 0;
+  cout << " O(1) \n";
+  printHelloWorld();
+  cout << "O(n) \n";
+  printHelloWorld1();
+  cout << " O(log n) \n";
+  printHelloWorld2();
+  cout << "Quadratictime—O(n2) \n";
+  printHelloWorld3();
+  cout << "Linear time — O(n + m) \n";
+  printHelloWorld4();
+  return 0;
 }
